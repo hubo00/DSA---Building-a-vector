@@ -70,7 +70,7 @@ const int myIntVector::at(int i) const {
 	}
 };
 
-
+// print() method used for testing the vector ( WONT BE INCLUDED IN FINAL PROGRAM )
 void myIntVector::print() {
 	for (int i = 0; i < m_size; i++) {
 		std::cout << arrPtr[i] << std::endl;

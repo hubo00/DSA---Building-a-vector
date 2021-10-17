@@ -1,3 +1,4 @@
+// Hubert Bukowski | x00161897
 #include <iostream>
 #include "myIntVector.h"
 
@@ -40,49 +41,64 @@ void myIntVector::push_back(int val) {
 
 // resize() method which takes a new size as a parameter and changes the vector to that size
 void myIntVector::resize(int i) {
-	int* newPtr;
-	newPtr = new int[i];
+	int* tmpPtr;
+	tmpPtr = new int[i];
 	if (i > m_capacity) { // If the new vector size is larger than the current
 		for (int index = 0; index < m_capacity; index++) {
-			newPtr[index] = arrPtr[index];
+			tmpPtr[index] = arrPtr[index];
 		}
 
-		// Assign new values to arrPtr
+		// Re-populates the updated arrPtr 
 		for (int index = 0; index < m_capacity; index++) {
-			arrPtr[index] = newPtr[index];
+			arrPtr[index] = tmpPtr[index];
 		}
 	}
 	else { // If the new vector size is smaller than the current
 		int newSize = 0;
 		for (int index = 0; index < i; index++) {
-			newPtr[index] = arrPtr[index];
+			tmpPtr[index] = arrPtr[index];
 		}
-
 		// If the new passed capacity is greater than the current size, Loop until you reach m_size
 		if (i >= m_size) {
 			for (int index = 0; index < m_size; index++) {
-				arrPtr[index] = newPtr[index];
+				arrPtr[index] = tmpPtr[index];
 				newSize++;
 			}
 		}
-		// If the new passed capacity is less than the current size, Loop until you reach i
+		// Else - if the new passed capacity is less than the current size, Loop until you reach i
 		else {
+			// Re-populates the updated arrPtr
 			for (int index = 0; index < i; index++) {
-				arrPtr[index] = newPtr[index];
+				arrPtr[index] = tmpPtr[index];
 				newSize++;
 			}
 		}
-		// Assign new values to arrPtr
+		// Assign new size to m_size
 		m_size = newSize;
 	}
 	m_capacity = i;
 
-	delete[] newPtr;
-	newPtr = nullptr;
+	delete[] tmpPtr;
+	tmpPtr = nullptr;
 };
 
-// at() method which returns the value at the passed index position
-const int myIntVector::at(int i) const {
+// at() method which returns the value at the passed index position - Not Constant, Allows for modifying the value
+int& myIntVector::at(int i) {
+	if (i > m_size || i < 0) {
+		if (i > m_capacity) {
+			std::cout << "Array index out of bounds - Increase vector size" << std::endl;
+		}
+		else {
+			std::cout << "Index position " << i << " is empty" << std::endl;
+		}
+	}
+	else {
+		return arrPtr[i];
+	}
+}
+
+// at() method which returns the value at the passed index position - Constant, Cannot be modified, used only for retrieving
+const int& myIntVector::at(int i) const {
 	if (i > m_size || i < 0) {
 		if (i > m_capacity) {
 			std::cout << "Array index out of bounds - Increase vector size" << std::endl;
@@ -97,16 +113,23 @@ const int myIntVector::at(int i) const {
 	}
 };
 
-// print method used for printing out contents of array ( FOR TESTING PURPOSES - WILL BE REMOVED FOR FINAL ITERATION )
-void myIntVector::print() {
-	for (int i = 0; i < m_size; i++) {
-		std::cout << arrPtr[i] << std::endl;
+// Overloaded [] operator which returns the value at the passed index position - Not Constant, Allows for modifying the value
+int& myIntVector::operator[](int i) {
+	if (i > m_size || i < 0) {
+		std::cout << "Array index out of bounds" << std::endl;
+	}
+	else {
+		return arrPtr[i];
 	}
 }
 
-/*---------------------*/
-
-// Overloaded [] operator
-//const int myIntVector::operator[](int i) const {
-//
-//}
+// Overloaded [] operator which returns the value at the passed index position - Constant, Cannot be modified, used only for retrieving
+const int& myIntVector::operator[](int i) const{
+	if (i > m_size || i < 0) {
+		std::cout << "Array index out of bounds" << std::endl;
+		return -1;
+	}
+	else {
+		return arrPtr[i];
+	}
+}

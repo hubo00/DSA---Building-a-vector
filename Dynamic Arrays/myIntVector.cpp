@@ -46,15 +46,28 @@ void myIntVector::resize(int i) {
 		for (int index = 0; index < m_capacity; index++) {
 			newPtr[index] = arrPtr[index];
 		}
-	}
-	else { // If the new vector size is smaller than the current
-		for (int index = 0; index < i; index++) {
-			newPtr[index] = arrPtr[index];
+
+		// Assign new values to arrPtr
+		delete[] arrPtr;
+		for (int index = 0; index < m_capacity; index++) {
+			arrPtr[index] = newPtr[index];
 		}
 	}
+	else { // If the new vector size is smaller than the current
+		int newSize = 0;
+		for (int index = 0; index < i; index++) {
+			newPtr[index] = arrPtr[index];
+			newSize++;
+		}
+
+		// Assign new values to arrPtr
+		delete[] arrPtr;
+		for (int index = 0; index < i; index++) {
+			arrPtr[index] = newPtr[index];
+		}
+		m_size = newSize;
+	}
 	m_capacity = i;
-	delete[] arrPtr;
-	arrPtr = newPtr;
 
 	delete[] newPtr;
 	newPtr = nullptr;
@@ -70,12 +83,7 @@ const int myIntVector::at(int i) const {
 	}
 };
 
-// print() method used for testing the vector ( WONT BE INCLUDED IN FINAL PROGRAM )
-void myIntVector::print() {
-	for (int i = 0; i < m_size; i++) {
-		std::cout << arrPtr[i] << std::endl;
-	}
-}
+
 /*---------------------*/
 
 // Overloaded [] operator

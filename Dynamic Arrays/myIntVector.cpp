@@ -13,7 +13,7 @@ myIntVector::myIntVector() {
 // Destructor for the myIntVector class
 myIntVector::~myIntVector() {
 	std::cout << "In the vector Destructor..." << std::endl;
-	delete [] arrPtr;
+	delete[] arrPtr;
 	arrPtr = nullptr;
 };
 
@@ -34,7 +34,7 @@ void myIntVector::push_back(int val) {
 		m_size++;
 	}
 	else {
-		std::cout << "Array index out of bounds: Increase array size using size()" << std::endl;
+		std::cout << "Array index out of bounds: Increase array size using .resize()" << std::endl;
 	}
 };
 
@@ -48,7 +48,6 @@ void myIntVector::resize(int i) {
 		}
 
 		// Assign new values to arrPtr
-		delete[] arrPtr;
 		for (int index = 0; index < m_capacity; index++) {
 			arrPtr[index] = newPtr[index];
 		}
@@ -57,14 +56,23 @@ void myIntVector::resize(int i) {
 		int newSize = 0;
 		for (int index = 0; index < i; index++) {
 			newPtr[index] = arrPtr[index];
-			newSize++;
 		}
 
-		// Assign new values to arrPtr
-		delete[] arrPtr;
-		for (int index = 0; index < i; index++) {
-			arrPtr[index] = newPtr[index];
+		// If the new passed capacity is greater than the current size, Loop until you reach m_size
+		if (i >= m_size) {
+			for (int index = 0; index < m_size; index++) {
+				arrPtr[index] = newPtr[index];
+				newSize++;
+			}
 		}
+		// If the new passed capacity is less than the current size, Loop until you reach i
+		else {
+			for (int index = 0; index < i; index++) {
+				arrPtr[index] = newPtr[index];
+				newSize++;
+			}
+		}
+		// Assign new values to arrPtr
 		m_size = newSize;
 	}
 	m_capacity = i;
@@ -73,9 +81,15 @@ void myIntVector::resize(int i) {
 	newPtr = nullptr;
 };
 
+// at() method which returns the value at the passed index position
 const int myIntVector::at(int i) const {
 	if (i > m_size || i < 0) {
-		std::cout << "Array index out of bounds" << std::endl;
+		if (i > m_capacity) {
+			std::cout << "Array index out of bounds - Increase vector size" << std::endl;
+		}
+		else {
+			std::cout << "Index position " << i << " is empty" << std::endl;
+		}
 		return -1;
 	}
 	else {
@@ -83,6 +97,12 @@ const int myIntVector::at(int i) const {
 	}
 };
 
+// print method used for printing out contents of array ( FOR TESTING PURPOSES - WILL BE REMOVED FOR FINAL ITERATION )
+void myIntVector::print() {
+	for (int i = 0; i < m_size; i++) {
+		std::cout << arrPtr[i] << std::endl;
+	}
+}
 
 /*---------------------*/
 
